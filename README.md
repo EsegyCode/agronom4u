@@ -1,100 +1,74 @@
-# Агроном для тебе (Agronom4u)
+# Agronom4u
 
-## Історія проєкту
+Purpose: practical Ukrainian-language agricultural portal for field and garden crop cultivation, calculators, crop rotation and a blog.
 
-Agronom4u — сайт, на якому буде багато інформації про вирощування основних культур: соя, пшениця, кукурудза, соняшник. А також усі види городніх культур: помідор, огірок, цибуля, часник, морква, буряк, квасоля, горох, щавель, салат, перець болгарський, перець чилі, кабачок, капуста, полуниця, смородина, малина, кукурудза солодка (цикова).
+Live site: `https://agronom4u.com` (`astro.config.mjs`). Status: static Astro site. License: TODO (owner).
 
-Джерело первинних записів — файл `Аграрка.docx` (нотатки з ведення агрофірми: обробітки, послідовність сівозміни `Соняшник - Кукурудза - Соя - Пшениця`, економіка на 1 га).
+## Key features
 
-Заголовок сайту: «Агроном для тебе — допомога з вирощуванням будь якої культури.».
+- Field crop guides: soy, wheat, corn and sunflower, 13 topics each.
+- Guides for 18 garden crops.
+- Calculators for germination/norm, yield and 1 ha economics.
+- Crop-rotation planner with recommended sequence.
+- Blog, FAQ, gallery and mobile app landing.
+- `/llms.txt` generated from TypeScript data.
+- Sitemap, robots, canonical URLs, JSON-LD Organization schema.
+- See [Features](docs/FEATURES.md).
 
-## Засади побудови
+## Tech stack
 
-- Кожна культура має власний піддомен (наприклад `soy.agronom4u...`). У репозиторії культури представлені окремими директоріями, які пізніше можна винести на піддомени.
-- Першою культурою для детального наповнення обрано Соя.
-- Кожна культура має власний путівник-сторінку з картками-блоками, що ведуть на окремі сторінки.
+| Area | Technology | Notes |
+| --- | --- | --- |
+| Framework | Astro 5.1 | static SSG |
+| Languages | TypeScript and JavaScript | data in `.ts`, OG script `.mjs` |
+| Styling | Custom CSS | `src/styles/global.css` |
+| Images | Sharp + pre-generated PNGs | `scripts/generate-og.mjs`, `public/og/` |
+| SEO | `@astrojs/sitemap`, robots, llms, JSON-LD | `astro.config.mjs` |
+| Build check | `scripts/verify-dist.mjs` | checks links/artifacts |
 
-### Картки-блоки (для кожної культури)
+## Quick start
 
-1. Підбір сорту та закупка насіння
-2. Підбір попередника
-3. Механічний обробіток грунтів
-4. Внесення добрив та препаратів
-5. Підготовка до посіву
-6. Посів культури
-7. Обробітка пестицидами
-8. Обробітка мікродобривами
-9. Десикація
-10. Збір врожаю
-11. Оптимальні показники по врожайності
-12. Вплив різних сполук, препаратів, варіантів посіву, попередників, норм висіву на врожайність
-13. Економіка вирощування (калькулятор)
-
-### Блоки головної сторінки
-
-1. Заголовок та опис; справа — фото поля (поки плейсхолдер).
-2. Культури для полів (картки).
-3. Культури для огороду (картки з фото; при наведенні — опис наявної інформації).
-4. FAQ: що за дані, актуальність, регіон (Україна).
-5. Картки-калькулятори: польова схожість, врожайність, економіка.
-6. Сівозміна: чому важливо + кнопка переходу на сторінку розрахунку.
-7. Галерея фото.
-8. Блог (картки з фото, ведуть на окремі сторінки новин; додаються вручну).
-9. Рекламний блок застосунку для Android (планер посіву, сівозміни, калькуляції цін, надійні продавці).
-10. Футер з посиланнями на основні сторінки.
-
-## Структура проєкту (основа)
-
+```sh
+npm install
+npm run dev
+npm run build
+npm run preview
 ```
+
+Dev server uses Astro defaults (usually `localhost:4321`). Build output: `dist/`.
+Scripts from `package.json`: `dev`, `build`, `build:only`, `og`, `preview`, `astro`.
+
+## Environment variables
+
+No environment variables are read by this project. No `.env.example` is expected or present.
+
+## Project structure
+
+```text
 agronom4u/
-├── README.md
-├── index.html
-├── assets/
-│   ├── css/style.css
-│   ├── js/main.js
-│   └── img/placeholder.svg
-├── crops/
-│   ├── field/
-│   │   ├── index.html
-│   │   ├── soy/            # детально (перша культура)
-│   │   ├── wheat/
-│   │   ├── corn/
-│   │   └── sunflower/
-│   └── garden/
-│       ├── index.html
-│       └── <культура>/
-├── calculators/
-│   ├── index.html
-│   ├── germination.html
-│   ├── yield.html
-│   └── economics.html
-├── crop-rotation/
-│   └── index.html
-├── gallery/
-│   └── index.html
-├── blog/
-│   ├── index.html
-│   └── posts/
-├── app/
-│   └── index.html
-└── faq/
-    └── index.html
+├── src/data/                 # site, crops, blog, FAQ
+├── src/pages/                # crop, calculator, blog, FAQ routes
+├── src/layouts, components    # layout and navigation
+├── public/                   # assets, robots.txt, OG PNGs
+├── scripts/                  # OG generation and dist check
+└── astro.config.mjs
 ```
 
-## Подальша робота (для AI-агента)
+## Documentation
 
-На основі цієї структури та даних з `Аграрка.docx` сформувати повноцінний багатосторінковий сайт: наповнення карток, окремі сторінки для кожної культури, калькулятори, галерея, блог, підключення мультимедіа та хостинг на піддоменах.
+- [Features](docs/FEATURES.md)
+- [Architecture](docs/ARCHITECTURE.md)
+- [Deployment](docs/DEPLOYMENT.md)
+- [FAQ](docs/FAQ.md)
+- [Content guide](docs/CONTENT-GUIDE.md)
+- [SEO](docs/SEO.md)
+- [Changelog](docs/CHANGELOG.md)
+- [Українська версія](README.uk.md)
 
+## Deployment
 
-## Рекомендований стек
+Static `dist/` output. Configured site URL is `https://agronom4u.com`. Hosting provider, CI and exact deploy command are not documented in the repository: TODO (owner).
 
-- Фреймворк: Astro (статична генерація, острівки інтерактивності, швидкий TTFB).
-- Стилі: Tailwind CSS або власний CSS.
-- Контент: MDX/Markdown для блогу та статей; JSON/YAML для даних калькуляторів.
-- Форми/калькулятори: Astro endpoints / Cloudflare Workers за потреби.
-- Деплой: Cloudflare Pages (CDN, прев'ю для PR, підтримка Astro).
-- Зображення: оптимізація через Astro Image; важких медіафайлів не очікується.
-- Аналітика: Cloudflare Web Analytics.
-- Домени: основний домен + субдомени для кожної культури (Cloudflare DNS).
+## Notes
 
-Висновок: так, Astro + деплой через Cloudflare Pages підходить і рекомендований для цього проєкту.
+Contact in source: `info@agronom4u.com`. License: TODO (owner). Agronom field notes come from `Аграрка.docx` at the project root.
