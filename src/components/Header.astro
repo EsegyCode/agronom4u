@@ -1,0 +1,68 @@
+---
+import { NAV_ITEMS } from '../data/site';
+
+interface Props {
+  currentPath?: string;
+}
+
+const { currentPath = '/' } = Astro.props;
+---
+
+<header class="site-header">
+  <div class="container nav-bar">
+    <a class="brand-link" href="/index.html" aria-label="Agronom4u — На головну">
+      <img src="/logo.svg" alt="Agronom4u — Агроном для тебе" width="220" height="48" />
+    </a>
+
+    <button
+      class="nav-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="main-nav"
+      id="nav-toggle-btn"
+    >
+      ☰ Меню
+    </button>
+
+    <ul class="nav-links" id="main-nav">
+      {NAV_ITEMS.map((item) => {
+        const isActive =
+          item.href === '/index.html'
+            ? currentPath === '/' || currentPath === '/index.html'
+            : currentPath.startsWith(item.href.replace('/index.html', ''));
+        return (
+          <li class="nav-item">
+            <a
+              class:list={['nav-link', { 'is-active': isActive }]}
+              href={item.href}
+            >
+              {item.label}
+              {item.children && <span aria-hidden="true" style="font-size:0.7em;opacity:0.7;">▾</span>}
+            </a>
+            {item.children && (
+              <div class="nav-dropdown">
+                {item.children.map((child) => (
+                  <a href={child.href}>
+                    <span class="dd-title">{child.label}</span>
+                    {child.desc && <span class="dd-desc">{child.desc}</span>}
+                  </a>
+                ))}
+              </div>
+            )}
+          </li>
+        );
+      })}
+    </ul>
+  </div>
+</header>
+
+<script>
+  const btn = document.getElementById('nav-toggle-btn');
+  const nav = document.getElementById('main-nav');
+  if (btn && nav) {
+    btn.addEventListener('click', () => {
+      const open = nav.classList.toggle('is-open');
+      btn.setAttribute('aria-expanded', String(open));
+    });
+  }
+</script>

@@ -1,0 +1,89 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { GARDEN_CROPS } from '../../../data/gardenCrops';
+
+const categories = ['Усі', 'Овочі', 'Зелень', 'Бобові', 'Ягідні'];
+const gardenIcons: Record<string, string> = {
+  tomato: '🍅', cucumber: '🥒', onion: '🧅', garlic: '🧄', carrot: '🥕',
+  beet: '🟣', bean: '🫘', pea: '🫛', sorrel: '🌿', lettuce: '🥬',
+  'bell-pepper': '🫑', chili: '🌶️', zucchini: '🥒', cabbage: '🥬',
+  strawberry: '🍓', currant: '🫐', raspberry: '🍇', 'sweet-corn': '🌽',
+};
+---
+
+<BaseLayout
+  title="Городні культури"
+  description="Довідник по 18 городніх та ягідних культурах України: схеми посадки, полив, підживлення, захист від хвороб та шкідників."
+  ogImage="/og/garden.png"
+  canonicalPath="/crops/garden/index.html"
+>
+  <section class="page-hero">
+    <div class="container">
+      <div class="breadcrumbs">
+        <a href="/index.html">Головна</a> › <span>Городні культури</span>
+      </div>
+      <span class="badge badge-dark">18 культур • Овочі, зелень, бобові, ягідні</span>
+      <h1>Городні культури</h1>
+      <p>Практичні схеми посадки, температурний режим ґрунту, полив, підживлення та захист для присадибних ділянок і фермерського городу.</p>
+    </div>
+  </section>
+
+  <section class="section section-white">
+    <div class="container">
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 26px;" id="garden-filters">
+        {categories.map((cat, i) => (
+          <button
+            type="button"
+            class:list={['btn', i === 0 ? 'btn-primary' : 'btn-outline']}
+            data-cat={cat}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+
+      <div class="grid cols-4" id="garden-grid">
+        {GARDEN_CROPS.map((g) => (
+          <article class="card" data-category={g.category}>
+            <div class="card-thumb" style="height: 140px;">
+              <span style="font-size: 3rem;" aria-hidden="true">{gardenIcons[g.slug] ?? '🌱'}</span>
+              <div class="card-overlay">{g.shortHover}</div>
+            </div>
+            <div class="card-body">
+              <span class="badge" style="align-self: flex-start;">{g.category}</span>
+              <h3>{g.name}</h3>
+              <p>Схема: <strong>{g.spacing}</strong></p>
+              <p style="font-size: 0.82rem;">Сезон: {g.season}</p>
+              <a class="card-footer-link" href={`/crops/garden/${g.slug}/index.html`}>Відкрити →</a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const btns = document.querySelectorAll<HTMLButtonElement>('#garden-filters button');
+  const cards = document.querySelectorAll<HTMLElement>('#garden-grid article');
+
+  btns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const cat = btn.dataset.cat;
+      btns.forEach((b) => {
+        b.classList.remove('btn-primary');
+        b.classList.add('btn-outline');
+      });
+      btn.classList.remove('btn-outline');
+      btn.classList.add('btn-primary');
+
+      cards.forEach((card) => {
+        if (cat === 'Усі' || card.dataset.category === cat) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+</script>

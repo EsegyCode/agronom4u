@@ -1,0 +1,21 @@
+{
+  "name": "agronom4u",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Агроном для тебе (Agronom4u) — аграрний довідник, сівозміна, калькулятори та база знань для України",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "node scripts/generate-og.mjs && astro build",
+    "build:only": "astro build",
+    "og": "node scripts/generate-og.mjs",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^5.1.0",
+    "@astrojs/sitemap": "^3.2.0"
+  },
+  "devDependencies": {
+    "sharp": "^0.33.5"
+  }
+}

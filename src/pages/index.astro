@@ -1,0 +1,364 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE } from '../data/site';
+import { FIELD_CROPS } from '../data/fieldCrops';
+import { GARDEN_CROPS } from '../data/gardenCrops';
+import { BLOG_POSTS } from '../data/blog';
+import { FAQ_ITEMS } from '../data/faq';
+
+const fieldList = Object.values(FIELD_CROPS);
+
+const cropIcons: Record<string, string> = {
+  soy: '🫘',
+  wheat: '🌾',
+  corn: '🌽',
+  sunflower: '🌻',
+};
+
+const gardenIcons: Record<string, string> = {
+  tomato: '🍅',
+  cucumber: '🥒',
+  onion: '🧅',
+  garlic: '🧄',
+  carrot: '🥕',
+  beet: '🟣',
+  bean: '🫘',
+  pea: '🫛',
+  sorrel: '🌿',
+  lettuce: '🥬',
+  'bell-pepper': '🫑',
+  chili: '🌶️',
+  zucchini: '🥒',
+  cabbage: '🥬',
+  strawberry: '🍓',
+  currant: '🫐',
+  raspberry: '🍇',
+  'sweet-corn': '🌽',
+};
+
+const homeSchema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: SITE.name,
+    url: SITE.url,
+    inLanguage: 'uk',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: FAQ_ITEMS.slice(0, 3).map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.answer,
+      },
+    })),
+  },
+];
+---
+
+<BaseLayout
+  title={SITE.title}
+  description={SITE.description}
+  ogImage="/og/default.png"
+  canonicalPath="/index.html"
+  schema={homeSchema}
+>
+  <!-- 1. HERO (Dark Green Inversion) -->
+  <section class="section-dark" style="padding: 58px 0 64px; position: relative; overflow: hidden;">
+    <div class="container" style="display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 36px; align-items: center;">
+      <div>
+        <span class="badge badge-dark" style="margin-bottom: 14px;">🇺🇦 Аграрна база знань України</span>
+        <h1 style="margin: 0 0 16px; font-size: clamp(1.9rem, 3.6vw, 2.85rem); line-height: 1.15; font-weight: 800; letter-spacing: -0.02em; color: #fff;">
+          Агроном для тебе — <span style="color: var(--light-green);">допомога</span> з вирощуванням будь-якої культури.
+        </h1>
+        <p style="font-size: 1.08rem; max-width: 56ch; margin: 0 0 26px; color: var(--text-on-dark-muted);">
+          Підбір сорту, підготовка ґрунту, внесення добрив, захист рослин, збір врожаю та точний розрахунок економіки 1 га для польових і городніх культур.
+        </p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+          <a class="btn btn-accent" href="/crops/field/soy/index.html">Путівник по сої →</a>
+          <a class="btn btn-outline-light" href="/calculators/economics.html">Економіка 1 га</a>
+          <a class="btn btn-outline-light" href="/crop-rotation/index.html">Сівозміна</a>
+        </div>
+      </div>
+
+      <!-- Visual Hero Card (SVG Field Illustration + Live Stats) -->
+      <div style="background: rgba(255,255,255,0.06); border: 1px solid var(--border-dark); border-radius: var(--radius-lg); padding: 22px; backdrop-filter: blur(8px);">
+        <svg viewBox="0 0 460 220" width="100%" style="border-radius: 14px; background: linear-gradient(180deg, #1b4332 0%, #2d6a4f 58%, #40916c 100%); margin-bottom: 16px;" role="img" aria-label="Польова схема Agronom4u">
+          <circle cx="385" cy="52" r="28" fill="#8bc34a" opacity="0.9"/>
+          <circle cx="385" cy="52" r="42" fill="#8bc34a" opacity="0.22"/>
+          <path d="M0 145 Q 140 115 280 142 T 460 130 L 460 220 L 0 220 Z" fill="#143622"/>
+          <path d="M0 168 Q 160 148 310 170 T 460 160 L 460 220 L 0 220 Z" fill="#0d2818"/>
+          <path d="M40 220 L 140 145 M120 220 L 210 142 M210 220 L 285 144 M305 220 L 360 140 M400 220 L 430 138" stroke="#8bc34a" stroke-width="2" stroke-dasharray="6 6" opacity="0.55"/>
+          <text x="24" y="42" fill="#d8f3dc" font-size="13" font-weight="700" font-family="system-ui, sans-serif">БАЗОВА СІВОЗМІНА</text>
+          <text x="24" y="66" fill="#ffffff" font-size="16" font-weight="800" font-family="system-ui, sans-serif">Соняшник → Кукурудза → Соя → Пшениця</text>
+        </svg>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; text-align: center;">
+          <div style="background: rgba(255,255,255,0.06); border-radius: 10px; padding: 10px;">
+            <div style="font-size: 1.35rem; font-weight: 800; color: var(--light-green);">4 × 13</div>
+            <div style="font-size: 0.78rem; color: var(--text-on-dark-muted);">розділів поля</div>
+          </div>
+          <div style="background: rgba(255,255,255,0.06); border-radius: 10px; padding: 10px;">
+            <div style="font-size: 1.35rem; font-weight: 800; color: var(--light-green);">18</div>
+            <div style="font-size: 0.78rem; color: var(--text-on-dark-muted);">городніх культур</div>
+          </div>
+          <div style="background: rgba(255,255,255,0.06); border-radius: 10px; padding: 10px;">
+            <div style="font-size: 1.35rem; font-weight: 800; color: var(--light-green);">4</div>
+            <div style="font-size: 0.78rem; color: var(--text-on-dark-muted);">калькулятори</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. ПОЛЬОВІ КУЛЬТУРИ (White Section) -->
+  <section class="section section-white">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Культури для полів</h2>
+          <p class="section-subtitle">Кожна польова культура має власний путівник з 13 етапів вирощування — від вибору сорту до погектарної економіки.</p>
+        </div>
+        <a class="btn btn-outline" href="/crops/field/index.html">Усі польові →</a>
+      </div>
+
+      <div class="grid cols-4">
+        {fieldList.map((crop) => (
+          <article class="card">
+            <div class="card-thumb">
+              <span style="font-size: 3.4rem;" aria-hidden="true">{cropIcons[crop.slug]}</span>
+              <div class="card-overlay">{crop.tagline}</div>
+            </div>
+            <div class="card-body">
+              <span class="badge" style="align-self: flex-start;">{crop.badge}</span>
+              <h3>{crop.name}</h3>
+              <p>{crop.keyStats[0].label}: <strong>{crop.keyStats[0].value}</strong></p>
+              <a class="card-footer-link" href={`/crops/field/${crop.slug}/index.html`}>
+                Відкрити путівник →
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. ГОРОДНІ КУЛЬТУРИ (Mint Light-Green Section) -->
+  <section class="section section-mint">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Культури для огороду</h2>
+          <p class="section-subtitle">18 овочевих, бобових, зеленних та ягідних культур. Наведіть на картку, щоб побачити ключові акценти догляду.</p>
+        </div>
+        <a class="btn btn-outline" href="/crops/garden/index.html">Каталог городу →</a>
+      </div>
+
+      <div class="grid cols-4">
+        {GARDEN_CROPS.map((g) => (
+          <article class="card">
+            <div class="card-thumb" style="height: 132px;">
+              <span style="font-size: 2.9rem;" aria-hidden="true">{gardenIcons[g.slug] ?? '🌱'}</span>
+              <div class="card-overlay">{g.shortHover}</div>
+            </div>
+            <div class="card-body">
+              <span class="badge" style="align-self: flex-start;">{g.category}</span>
+              <h3>{g.name}</h3>
+              <p>Схема: {g.spacing}</p>
+              <a class="card-footer-link" href={`/crops/garden/${g.slug}/index.html`}>
+                Відкрити →
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. КАЛЬКУЛЯТОРИ (White Section) -->
+  <section class="section section-white">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Калькулятори агронома</h2>
+          <p class="section-subtitle">Швидкий розрахунок вагової норми висіву, прогнозу валового збору та чистого прибутку на 1 га.</p>
+        </div>
+        <a class="btn btn-outline" href="/calculators/index.html">Всі інструменти →</a>
+      </div>
+
+      <div class="grid cols-3">
+        <article class="card">
+          <div class="card-thumb">
+            <span style="font-size: 3rem;" aria-hidden="true">🌱</span>
+            <div class="card-overlay">Розрахунок кг/га за масою 1000 насінин, чистотою та схожістю</div>
+          </div>
+          <div class="card-body">
+            <h3>Польова схожість</h3>
+            <p>Точна вагова норма висіву для сої, пшениці, кукурудзи та соняшнику.</p>
+            <a class="card-footer-link" href="/calculators/germination.html">Розрахувати →</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-thumb">
+            <span style="font-size: 3rem;" aria-hidden="true">📊</span>
+            <div class="card-overlay">Оцінка очікуваного врожаю за площею поля та вологозабезпеченням</div>
+          </div>
+          <div class="card-body">
+            <h3>Врожайність</h3>
+            <p>Прогноз валового збору в тоннах і перерахунок на залікову вологість.</p>
+            <a class="card-footer-link" href="/calculators/yield.html">Розрахувати →</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-thumb">
+            <span style="font-size: 3rem;" aria-hidden="true">💰</span>
+            <div class="card-overlay">Формула агрофірми: виручка мінус насіння, КАС, ЗЗР, ПММ, зарплата, паї</div>
+          </div>
+          <div class="card-body">
+            <h3>Економіка 1 га</h3>
+            <p>Повна рентабельність поля з урахуванням усіх виробничих витрат.</p>
+            <a class="card-footer-link" href="/calculators/economics.html">Розрахувати →</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. СІВОЗМІНА (Dark Green Inversion Block) -->
+  <section class="section section-dark">
+    <div class="container" style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 28px; align-items: center;">
+      <div>
+        <span class="badge badge-dark" style="margin-bottom: 12px;">Планер поля</span>
+        <h2 class="section-title" style="color: #fff;">Сівозміна та вибір наступника</h2>
+        <p style="font-size: 1.05rem; margin: 12px 0 22px;">
+          Сівозміна критично важлива для здоров’я ґрунту, контролю хвороб (особливо при ризику «Соя по сої») та стабільної врожайності. Вкажіть поточну культуру та отримайте рекомендовану послідовність.
+        </p>
+        <a class="btn btn-accent" href="/crop-rotation/index.html">Розрахувати сівозміну →</a>
+      </div>
+      <div class="card card-dark" style="padding: 22px;">
+        <h3 style="margin-top: 0;">Класичний цикл (4 поля)</h3>
+        <ol style="margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px; color: var(--text-on-dark-muted);">
+          <li><strong style="color: #fff;">Соняшник</strong> — 55 тис./га (інтервал мін. 4 роки)</li>
+          <li><strong style="color: #fff;">Кукурудза</strong> — 72 тис./га, прибирання падалиці</li>
+          <li><strong style="color: #fff;">Соя</strong> — азотфіксація, ідеальний попередник</li>
+          <li><strong style="color: #fff;">Пшениця</strong> — стабільний збір після сої</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. ГАЛЕРЕЯ ТА БЛОГ (Mint + White) -->
+  <section class="section section-mint">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Галерея польових робіт</h2>
+          <p class="section-subtitle">Ключові етапи сезону: від весняного боронування до збирання врожаю.</p>
+        </div>
+        <a class="btn btn-outline" href="/gallery/index.html">Всі фото →</a>
+      </div>
+
+      <div class="grid cols-4">
+        {[
+          { title: 'Боронування та закриття вологи', tag: 'Весна • 2 проходи', icon: '🚜' },
+          { title: 'Сівба сої сівалкою Клен', tag: '450 тис./га', icon: '🌱' },
+          { title: 'Підживлення пшениці КАС-32', tag: '200 кг / 150 л/га', icon: '💧' },
+          { title: 'Збирання та аналіз економіки', tag: 'Осінь • Жнива', icon: '🌾' },
+        ].map((item) => (
+          <a href="/gallery/index.html" class="card" style="text-decoration: none;">
+            <div class="card-thumb" style="height: 140px;">
+              <span style="font-size: 2.8rem;" aria-hidden="true">{item.icon}</span>
+              <div class="card-overlay">{item.tag}</div>
+            </div>
+            <div class="card-body">
+              <h3 style="font-size: 0.98rem;">{item.title}</h3>
+              <p>{item.tag}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. БЛОГ -->
+  <section class="section section-white">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Блог та польові нотатки</h2>
+          <p class="section-subtitle">Практичні розбори технологій на основі реальних польових записів.</p>
+        </div>
+        <a class="btn btn-outline" href="/blog/index.html">Усі публікації →</a>
+      </div>
+
+      <div class="grid cols-3">
+        {BLOG_POSTS.map((post) => (
+          <article class="card">
+            <div class="card-body">
+              <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+                <span class="badge">{post.category}</span>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">{post.readTime}</span>
+              </div>
+              <h3 style="margin-top: 6px;">{post.title}</h3>
+              <p>{post.excerpt}</p>
+              <a class="card-footer-link" href={`/blog/posts/${post.slug}.html`}>Читати статтю →</a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. FAQ (Mint Section) -->
+  <section class="section section-mint">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Часті запитання</h2>
+          <p class="section-subtitle">Джерела даних, регіон адаптації та принципи роботи довідника.</p>
+        </div>
+        <a class="btn btn-outline" href="/faq/index.html">Усі питання →</a>
+      </div>
+
+      <div class="grid cols-3">
+        {FAQ_ITEMS.slice(0, 3).map((item) => (
+          <div class="card">
+            <div class="card-body">
+              <span class="badge" style="align-self: flex-start;">{item.category}</span>
+              <h3>{item.question}</h3>
+              <p>{item.answer}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. ANDROID APP PROMO (Dark Green Inversion) -->
+  <section class="section section-dark">
+    <div class="container" style="display: flex; align-items: center; justify-content: space-between; gap: 28px; flex-wrap: wrap;">
+      <div style="max-width: 62ch;">
+        <span class="badge badge-dark" style="margin-bottom: 10px;">📱 Android-застосунок</span>
+        <h2 class="section-title" style="color: #fff;">Застосунок «Агроном для тебе»</h2>
+        <p style="margin: 12px 0 0; font-size: 1.05rem;">
+          Планер посіву, калькулятор сівозміни, швидкий розрахунок витрат на 1 га та перевірені постачальники насіння й ЗЗР — офлайн прямо в полі.
+        </p>
+      </div>
+      <div>
+        <a class="btn btn-accent" href="/app/index.html">Дізнатися більше →</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  @media (max-width: 860px) {
+    .section-dark .container {
+      grid-template-columns: 1fr !important;
+    }
+  }
+</style>

@@ -1,0 +1,50 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { FAQ_ITEMS } from '../../data/faq';
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: FAQ_ITEMS.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.answer,
+    },
+  })),
+};
+---
+
+<BaseLayout
+  title="Часті запитання (FAQ)"
+  description="Відповіді на часті запитання про Agronom4u: джерела агрономічних даних, актуальність, регіон України, сівозміну та коткування."
+  ogImage="/og/faq.png"
+  canonicalPath="/faq/index.html"
+  schema={faqSchema}
+>
+  <section class="page-hero">
+    <div class="container">
+      <div class="breadcrumbs">
+        <a href="/index.html">Головна</a> › <span>FAQ</span>
+      </div>
+      <span class="badge badge-dark">Довідка</span>
+      <h1>Часті запитання</h1>
+      <p>Усе про походження нормативів, правила сівозміни та використання інструментів порталу.</p>
+    </div>
+  </section>
+
+  <section class="section section-white">
+    <div class="container" style="max-width: 860px; display: flex; flex-direction: column; gap: 12px;">
+      {FAQ_ITEMS.map((item, idx) => (
+        <details class="card" style="padding: 18px 22px;" open={idx === 0}>
+          <summary style="cursor: pointer; font-weight: 800; font-size: 1.05rem; color: var(--dark-green); list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 12px;">
+            <span>{item.question}</span>
+            <span class="badge">{item.category}</span>
+          </summary>
+          <p style="margin: 12px 0 0; color: var(--text-muted);">{item.answer}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

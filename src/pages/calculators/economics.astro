@@ -1,0 +1,150 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Калькулятор економіки вирощування (1 га)"
+  description="Повна формула рентабельності 1 га з нотаток агрофірми: насіння, КАС-32, карбамід та мікродобрива, пестициди, ПММ, зарплата, амортизація, паї та податок."
+  ogImage="/og/calculators.png"
+  canonicalPath="/calculators/economics.html"
+>
+  <section class="page-hero">
+    <div class="container">
+      <div class="breadcrumbs">
+        <a href="/index.html">Головна</a> ›
+        <a href="/calculators/index.html">Калькулятори</a> ›
+        <span>Економіка 1 га</span>
+      </div>
+      <span class="badge badge-dark">Формула з «Аграрка.docx»</span>
+      <h1>Економіка вирощування (1 га)</h1>
+      <p>Розрахунок валової виручки, собівартості та чистого прибутку на 1 гектар і на все поле.</p>
+    </div>
+  </section>
+
+  <section class="section section-white">
+    <div class="container">
+      <div class="calc-box">
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px;">
+          <span style="font-size: 0.88rem; font-weight: 700; color: var(--text-muted); align-self: center;">Пресет культури:</span>
+          <button type="button" class="btn btn-outline eco-preset" data-yield="2.8" data-price="17500" data-seed="4500" data-kas="0" data-urea="1800" data-zzr="3200" data-fuel="3400" data-labor="2400">Соя</button>
+          <button type="button" class="btn btn-outline eco-preset" data-yield="5.5" data-price="8500" data-seed="3200" data-kas="4200" data-urea="1600" data-zzr="2800" data-fuel="3600" data-labor="2500">Пшениця</button>
+          <button type="button" class="btn btn-outline eco-preset" data-yield="8.5" data-price="7800" data-seed="5800" data-kas="2500" data-urea="1200" data-zzr="3100" data-fuel="4200" data-labor="2800">Кукурудза</button>
+          <button type="button" class="btn btn-outline eco-preset" data-yield="2.9" data-price="21000" data-seed="5400" data-kas="0" data-urea="1400" data-zzr="3900" data-fuel="3500" data-labor="2400">Соняшник</button>
+        </div>
+
+        <div class="form-grid">
+          <div class="field">
+            <label for="e-area">Площа поля (га)</label>
+            <input id="e-area" type="number" value="50" min="1" step="1" />
+          </div>
+          <div class="field">
+            <label for="e-yield">Середня врожайність (т/га)</label>
+            <input id="e-yield" type="number" value="2.8" min="0.1" step="0.1" />
+          </div>
+          <div class="field">
+            <label for="e-price">Ціна збуту за 1 тонну (грн)</label>
+            <input id="e-price" type="number" value="17500" min="0" step="100" />
+          </div>
+          <div class="field">
+            <label for="e-seed">Насіння (грн/га)</label>
+            <input id="e-seed" type="number" value="4500" min="0" step="100" />
+          </div>
+          <div class="field">
+            <label for="e-kas">КАС-32 / Основні добрива (грн/га)</label>
+            <input id="e-kas" type="number" value="0" min="0" step="100" />
+          </div>
+          <div class="field">
+            <label for="e-urea">Карбамід, бор та мікродобрива (грн/га)</label>
+            <input id="e-urea" type="number" value="1800" min="0" step="100" />
+          </div>
+          <div class="field">
+            <label for="e-zzr">Пестициди (гербіцид, фунгіцид) (грн/га)</label>
+            <input id="e-zzr" type="number" value="3200" min="0" step="100" />
+          </div>
+          <div class="field">
+            <label for="e-fuel">Оплата палива (всі операції) (грн/га)</label>
+            <input id="e-fuel" type="number" value="3400" min="0" step="100" />
+          </div>
+          <div class="field">
+            <label for="e-labor">Оплата робітників погектарно (грн/га)</label>
+            <input id="e-labor" type="number" value="2400" min="0" step="100" />
+          </div>
+          <div class="field">
+            <label for="e-amort">Амортизація техніки та запчастини (грн/га)</label>
+            <input id="e-amort" type="number" value="2500" min="0" step="100" />
+          </div>
+          <div class="field">
+            <label for="e-rent">Виплата орендодавцям (паї) (грн/га)</label>
+            <input id="e-rent" type="number" value="5500" min="0" step="100" />
+          </div>
+          <div class="field">
+            <label for="e-tax">Податок (грн/га)</label>
+            <input id="e-tax" type="number" value="1600" min="0" step="100" />
+          </div>
+        </div>
+
+        <div class="result-panel">
+          <div class="result-item">
+            <div class="r-label">Валова виручка / га</div>
+            <div class="r-value" id="er-rev">49 000 грн</div>
+          </div>
+          <div class="result-item">
+            <div class="r-label">Повні витрати / га</div>
+            <div class="r-value" id="er-cost" style="color: #fde68a;">24 900 грн</div>
+          </div>
+          <div class="result-item">
+            <div class="r-label">Чистий прибуток / га</div>
+            <div class="r-value" id="er-profit">24 100 грн</div>
+          </div>
+          <div class="result-item">
+            <div class="r-label">Прибуток з усього поля</div>
+            <div class="r-value" id="er-total">1 205 000 грн</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const ids = [
+    'e-area', 'e-yield', 'e-price', 'e-seed', 'e-kas',
+    'e-urea', 'e-zzr', 'e-fuel', 'e-labor', 'e-amort', 'e-rent', 'e-tax',
+  ] as const;
+  const inputs = Object.fromEntries(ids.map((id) => [id, document.getElementById(id) as HTMLInputElement]));
+  const num = (id: (typeof ids)[number]) => parseFloat(inputs[id].value) || 0;
+
+  function recalc() {
+    const area = num('e-area');
+    const revHa = num('e-yield') * num('e-price');
+    const costHa =
+      num('e-seed') + num('e-kas') + num('e-urea') + num('e-zzr') +
+      num('e-fuel') + num('e-labor') + num('e-amort') + num('e-rent') + num('e-tax');
+    const profitHa = revHa - costHa;
+    const totalProfit = profitHa * area;
+
+    document.getElementById('er-rev')!.textContent = `${Math.round(revHa).toLocaleString('uk-UA')} грн`;
+    document.getElementById('er-cost')!.textContent = `${Math.round(costHa).toLocaleString('uk-UA')} грн`;
+    const profitEl = document.getElementById('er-profit')!;
+    profitEl.textContent = `${Math.round(profitHa).toLocaleString('uk-UA')} грн`;
+    profitEl.style.color = profitHa >= 0 ? 'var(--light-green)' : '#fca5a5';
+    document.getElementById('er-total')!.textContent = `${Math.round(totalProfit).toLocaleString('uk-UA')} грн`;
+  }
+
+  ids.forEach((id) => inputs[id].addEventListener('input', recalc));
+  document.querySelectorAll<HTMLButtonElement>('.eco-preset').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      inputs['e-yield'].value = btn.dataset.yield!;
+      inputs['e-price'].value = btn.dataset.price!;
+      inputs['e-seed'].value = btn.dataset.seed!;
+      inputs['e-kas'].value = btn.dataset.kas!;
+      inputs['e-urea'].value = btn.dataset.urea!;
+      inputs['e-zzr'].value = btn.dataset.zzr!;
+      inputs['e-fuel'].value = btn.dataset.fuel!;
+      inputs['e-labor'].value = btn.dataset.labor!;
+      recalc();
+    });
+  });
+
+  recalc();
+</script>

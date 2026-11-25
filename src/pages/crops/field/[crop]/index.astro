@@ -1,0 +1,97 @@
+---
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import { FIELD_CROPS, FIELD_TOPICS, type FieldCrop } from '../../../../data/fieldCrops';
+import { SITE } from '../../../../data/site';
+
+export function getStaticPaths() {
+  return Object.values(FIELD_CROPS).map((crop) => ({
+    params: { crop: crop.slug },
+    props: { crop },
+  }));
+}
+
+interface Props {
+  crop: FieldCrop;
+}
+
+const { crop } = Astro.props;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: `${crop.name} — путівник з вирощування`,
+  description: crop.description,
+  url: `${SITE.url}/crops/field/${crop.slug}/index.html`,
+};
+---
+
+<BaseLayout
+  title={`${crop.name} — путівник по вирощуванню`}
+  description={crop.description}
+  ogImage={`/og/field-${crop.slug}.png`}
+  canonicalPath={`/crops/field/${crop.slug}/index.html`}
+  schema={schema}
+>
+  <section class="page-hero">
+    <div class="container">
+      <div class="breadcrumbs">
+        <a href="/index.html">Головна</a> ›
+        <a href="/crops/field/index.html">Польові культури</a> ›
+        <span>{crop.name}</span>
+      </div>
+      <span class="badge badge-dark">{crop.badge} • {crop.latinName}</span>
+      <h1>Путівник: {crop.name}</h1>
+      <p>{crop.description}</p>
+
+      <div class="grid cols-4" style="margin-top: 26px;">
+        {crop.keyStats.map((st) => (
+          <div style="background: rgba(255,255,255,0.08); border: 1px solid var(--border-dark); border-radius: 12px; padding: 14px;">
+            <div style="font-size: 0.78rem; color: var(--text-on-dark-muted);">{st.label}</div>
+            <div style="font-size: 1.15rem; font-weight: 800; color: var(--light-green); margin-top: 4px;">{st.value}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-white">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Усі 13 етапів технології ({crop.name})</h2>
+          <p class="section-subtitle">Оберіть потрібний етап технологічної карти для детального ознайомлення.</p>
+        </div>
+        <a class="btn btn-outline" href="/crops/field/index.html">← До всіх культур</a>
+      </div>
+
+      <div class="grid cols-3">
+        {FIELD_TOPICS.map((topic) => (
+          <a class="card" href={`/crops/field/${crop.slug}/${topic.slug}.html`} style="text-decoration: none;">
+            <div class="card-body">
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <span class="badge">Етап {topic.order}</span>
+                <span style="font-size: 1.4rem;" aria-hidden="true">{topic.icon}</span>
+              </div>
+              <h3 style="margin-top: 6px;">{topic.title}</h3>
+              <p>{topic.shortDesc}</p>
+              <span class="card-footer-link">Читати розділ →</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-mint">
+    <div class="container" style="display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap;">
+      <div>
+        <h2 style="margin: 0 0 6px; color: var(--dark-green);">Розрахуйте норму висіву та економіку для «{crop.name}»</h2>
+        <p style="margin: 0; color: var(--text-muted);">Перевірте потребу насіння в кг/га та чистий прибуток на 1 га у наших калькуляторах.</p>
+      </div>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <a class="btn btn-primary" href="/calculators/germination.html">Норма висіву</a>
+        <a class="btn btn-outline" href="/calculators/economics.html">Економіка 1 га</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

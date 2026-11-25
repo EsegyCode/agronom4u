@@ -1,0 +1,92 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Калькулятор врожайності"
+  description="Прогноз валового збору зерна та перерахунок на залікову вологість для полів України."
+  ogImage="/og/calculators.png"
+  canonicalPath="/calculators/yield.html"
+>
+  <section class="page-hero">
+    <div class="container">
+      <div class="breadcrumbs">
+        <a href="/index.html">Головна</a> ›
+        <a href="/calculators/index.html">Калькулятори</a> ›
+        <span>Врожайність</span>
+      </div>
+      <span class="badge badge-dark">Прогноз збору</span>
+      <h1>Калькулятор врожайності</h1>
+      <p>Перерахуйте бункерний збір на залікову (базову) вологість та оцініть очікувану валову виручку поля.</p>
+    </div>
+  </section>
+
+  <section class="section section-white">
+    <div class="container">
+      <div class="calc-box">
+        <div class="form-grid">
+          <div class="field">
+            <label for="y-area">Площа поля (га)</label>
+            <input id="y-area" type="number" value="65" min="0.1" step="0.5" />
+          </div>
+          <div class="field">
+            <label for="y-bunker">Бункерна врожайність (т/га)</label>
+            <input id="y-bunker" type="number" value="3.1" min="0.1" step="0.1" />
+          </div>
+          <div class="field">
+            <label for="y-moist">Фактична вологість при збиранні (%)</label>
+            <input id="y-moist" type="number" value="15.5" min="5" max="40" step="0.5" />
+          </div>
+          <div class="field">
+            <label for="y-base">Базова (залікова) вологість (%)</label>
+            <input id="y-base" type="number" value="12.0" min="5" max="20" step="0.5" />
+          </div>
+          <div class="field">
+            <label for="y-price">Ціна збуту (грн/т)</label>
+            <input id="y-price" type="number" value="17500" min="100" step="100" />
+          </div>
+        </div>
+
+        <div class="result-panel">
+          <div class="result-item">
+            <div class="r-label">Залікова врожайність</div>
+            <div class="r-value" id="yr-net">2.98 т/га</div>
+          </div>
+          <div class="result-item">
+            <div class="r-label">Валовий заліковий збір</div>
+            <div class="r-value" id="yr-total">193.5 т</div>
+          </div>
+          <div class="result-item">
+            <div class="r-label">Очікувана виручка</div>
+            <div class="r-value" id="yr-rev">3 386 250 грн</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const ids = ['y-area', 'y-bunker', 'y-moist', 'y-base', 'y-price'] as const;
+  const inputs = Object.fromEntries(ids.map((id) => [id, document.getElementById(id) as HTMLInputElement]));
+
+  function recalc() {
+    const area = parseFloat(inputs['y-area'].value) || 0;
+    const bunker = parseFloat(inputs['y-bunker'].value) || 0;
+    const moist = parseFloat(inputs['y-moist'].value) || 0;
+    const base = parseFloat(inputs['y-base'].value) || 0;
+    const price = parseFloat(inputs['y-price'].value) || 0;
+
+    const factor = (100 - moist) / Math.max(1, 100 - base);
+    const netYield = bunker * Math.min(1.05, factor);
+    const totalTons = netYield * area;
+    const revenue = totalTons * price;
+
+    document.getElementById('yr-net')!.textContent = `${netYield.toFixed(2)} т/га`;
+    document.getElementById('yr-total')!.textContent = `${totalTons.toFixed(1)} т`;
+    document.getElementById('yr-rev')!.textContent = `${Math.round(revenue).toLocaleString('uk-UA')} грн`;
+  }
+
+  ids.forEach((id) => inputs[id].addEventListener('input', recalc));
+  recalc();
+</script>

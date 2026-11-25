@@ -1,0 +1,63 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Калькулятори агронома"
+  description="Онлайн-калькулятори для агрономів України: польова схожість та норма висіву (кг/га), прогноз врожайності та повна економіка на 1 га."
+  ogImage="/og/calculators.png"
+  canonicalPath="/calculators/index.html"
+>
+  <section class="page-hero">
+    <div class="container">
+      <div class="breadcrumbs">
+        <a href="/index.html">Головна</a> › <span>Калькулятори</span>
+      </div>
+      <span class="badge badge-dark">Точні розрахунки без Excel</span>
+      <h1>Калькулятори агронома</h1>
+      <p>Швидкі інструменти для планування норми висіву, прогнозу врожаю та оцінки рентабельності гектара.</p>
+    </div>
+  </section>
+
+  <section class="section section-white">
+    <div class="container">
+      <div class="grid cols-3">
+        <article class="card">
+          <div class="card-thumb">
+            <span style="font-size: 3rem;" aria-hidden="true">🌱</span>
+            <div class="card-overlay">Перерахунок тис./га або млн/га у точні кг/га з урахуванням маси 1000 та схожості</div>
+          </div>
+          <div class="card-body">
+            <h3>Польова схожість і норма висіву</h3>
+            <p>Введіть густоту, масу 1000, чистоту та схожість — отримайте вагову норму на 1 га та на всю площу.</p>
+            <a class="card-footer-link" href="/calculators/germination.html">Відкрити калькулятор →</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-thumb">
+            <span style="font-size: 3rem;" aria-hidden="true">📊</span>
+            <div class="card-overlay">Розрахунок очікуваного валу зерна та перерахунок на залікову вологість</div>
+          </div>
+          <div class="card-body">
+            <h3>Прогноз врожайності</h3>
+            <p>Оцініть валовий збір з поля, втрати на сушку/вологість та очікувану виручку.</p>
+            <a class="card-footer-link" href="/calculators/yield.html">Відкрити калькулятор →</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-thumb">
+            <span style="font-size: 3rem;" aria-hidden="true">💰</span>
+            <div class="card-overlay">Повна формула агрофірми: насіння, КАС-32, карбамід, ЗЗР, ПММ, зарплата, амортизація, паї</div>
+          </div>
+          <div class="card-body">
+            <h3>Економіка 1 га</h3>
+            <p>Моделюйте чистий прибуток і рентабельність поля з пресетами для сої, пшениці, кукурудзи й соняшнику.</p>
+            <a class="card-footer-link" href="/calculators/economics.html">Відкрити калькулятор →</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

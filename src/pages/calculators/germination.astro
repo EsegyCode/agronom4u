@@ -1,0 +1,116 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Калькулятор польової схожості та норми висіву"
+  description="Розрахуйте вагову норму висіву (кг/га) та потребу насіння на все поле з урахуванням маси 1000 насінин, чистоти і схожості."
+  ogImage="/og/calculators.png"
+  canonicalPath="/calculators/germination.html"
+>
+  <section class="page-hero">
+    <div class="container">
+      <div class="breadcrumbs">
+        <a href="/index.html">Головна</a> ›
+        <a href="/calculators/index.html">Калькулятори</a> ›
+        <span>Польова схожість</span>
+      </div>
+      <span class="badge badge-dark">Формула посіву</span>
+      <h1>Польова схожість і норма висіву</h1>
+      <p>Розрахунок вагової норми висіву (кг/га) за лабораторними показниками партії насіння.</p>
+    </div>
+  </section>
+
+  <section class="section section-white">
+    <div class="container">
+      <div class="calc-box">
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px;">
+          <span style="font-size: 0.88rem; font-weight: 700; color: var(--text-muted); align-self: center;">Швидкий пресет:</span>
+          <button type="button" class="btn btn-outline preset-btn" data-density="450" data-tkm="165" data-purity="98" data-germ="92">Соя (Клен 450к)</button>
+          <button type="button" class="btn btn-outline preset-btn" data-density="5500" data-tkm="44" data-purity="98" data-germ="93">Пшениця (5.5 млн)</button>
+          <button type="button" class="btn btn-outline preset-btn" data-density="72" data-tkm="290" data-purity="99" data-germ="95">Кукурудза (72к)</button>
+          <button type="button" class="btn btn-outline preset-btn" data-density="55" data-tkm="65" data-purity="99" data-germ="94">Соняшник (55к)</button>
+        </div>
+
+        <div class="form-grid">
+          <div class="field">
+            <label for="density">Цільова густота (тис. шт./га)</label>
+            <input id="density" type="number" value="450" min="1" step="1" />
+          </div>
+          <div class="field">
+            <label for="tkm">Маса 1000 насінин (г)</label>
+            <input id="tkm" type="number" value="165" min="1" step="0.5" />
+          </div>
+          <div class="field">
+            <label for="purity">Чистота насіння (%)</label>
+            <input id="purity" type="number" value="98" min="50" max="100" step="0.5" />
+          </div>
+          <div class="field">
+            <label for="germ">Лабораторна схожість (%)</label>
+            <input id="germ" type="number" value="92" min="50" max="100" step="0.5" />
+          </div>
+          <div class="field">
+            <label for="area">Площа поля (га)</label>
+            <input id="area" type="number" value="50" min="0.1" step="0.5" />
+          </div>
+          <div class="field">
+            <label for="insurance">Страхова надбавка на польові умови (%)</label>
+            <input id="insurance" type="number" value="8" min="0" max="30" step="1" />
+          </div>
+        </div>
+
+        <div class="result-panel">
+          <div class="result-item">
+            <div class="r-label">Посівна придатність</div>
+            <div class="r-value" id="res-suitability">90.2%</div>
+          </div>
+          <div class="result-item">
+            <div class="r-label">Вагова норма (кг/га)</div>
+            <div class="r-value" id="res-kgha">89.0 кг/га</div>
+          </div>
+          <div class="result-item">
+            <div class="r-label">Загальна потреба</div>
+            <div class="r-value" id="res-total">4 450 кг</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const ids = ['density', 'tkm', 'purity', 'germ', 'area', 'insurance'] as const;
+  const inputs = Object.fromEntries(ids.map((id) => [id, document.getElementById(id) as HTMLInputElement]));
+
+  function recalc() {
+    const density = parseFloat(inputs.density.value) || 0;
+    const tkm = parseFloat(inputs.tkm.value) || 0;
+    const purity = Math.max(1, parseFloat(inputs.purity.value) || 100);
+    const germ = Math.max(1, parseFloat(inputs.germ.value) || 100);
+    const area = parseFloat(inputs.area.value) || 0;
+    const ins = parseFloat(inputs.insurance.value) || 0;
+
+    const suitability = (purity * germ) / 100;
+    // density (thous/ha) * tkm (g) / 1000 = kg/ha at 100% suitability
+    const baseKgHa = (density * tkm) / 1000;
+    const actualKgHa = (baseKgHa / (suitability / 100)) * (1 + ins / 100);
+    const totalKg = actualKgHa * area;
+
+    document.getElementById('res-suitability')!.textContent = `${suitability.toFixed(1)}%`;
+    document.getElementById('res-kgha')!.textContent = `${actualKgHa.toFixed(1)} кг/га`;
+    document.getElementById('res-total')!.textContent = `${Math.round(totalKg).toLocaleString('uk-UA')} кг`;
+  }
+
+  ids.forEach((id) => inputs[id].addEventListener('input', recalc));
+  document.querySelectorAll<HTMLButtonElement>('.preset-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      inputs.density.value = btn.dataset.density!;
+      inputs.tkm.value = btn.dataset.tkm!;
+      inputs.purity.value = btn.dataset.purity!;
+      inputs.germ.value = btn.dataset.germ!;
+      recalc();
+    });
+  });
+
+  recalc();
+</script>

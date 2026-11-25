@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 48" fill="none" role="img" aria-label="Agronom4u — Агроном для тебе">
+  <!-- Emblem -->
+  <rect x="2" y="4" width="40" height="40" rx="12" fill="#1b4332"/>
+  <path d="M22 36V18" stroke="#8bc34a" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M22 28C22 22 27 17 33 17C33 23 28 28 22 28Z" fill="#8bc34a"/>
+  <path d="M22 23C22 17 17 12 11 12C11 18 16 23 22 23Z" fill="#4ade80"/>
+  <circle cx="22" cy="12" r="2.6" fill="#d8f3dc"/>
+  <!-- Brand Text -->
+  <text x="52" y="25" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="19" font-weight="800" fill="#143622" letter-spacing="-0.02em">Agronom<tspan fill="#2e7d32">4u</tspan></text>
+  <text x="52" y="39" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="10.5" font-weight="600" fill="#4a6b53" letter-spacing="0.03em">АГРОНОМ ДЛЯ ТЕБЕ</text>
+</svg>

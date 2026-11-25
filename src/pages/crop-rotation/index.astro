@@ -1,0 +1,117 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Сівозміна та вибір наступника"
+  description="Інтерактивний планер сівозміни за схемою агрофірми: Соняшник → Кукурудза → Соя → Пшениця. Рекомендації та попередження щодо повторних посівів."
+  ogImage="/og/rotation.png"
+  canonicalPath="/crop-rotation/index.html"
+>
+  <section class="page-hero">
+    <div class="container">
+      <div class="breadcrumbs">
+        <a href="/index.html">Головна</a> › <span>Сівозміна</span>
+      </div>
+      <span class="badge badge-dark">Соняшник → Кукурудза → Соя → Пшениця</span>
+      <h1>Планер сівозміни</h1>
+      <p>Оберіть поточну або минулорічну культуру на полі, щоб отримати оптимальну послідовність на наступні 4 роки.</p>
+    </div>
+  </section>
+
+  <section class="section section-white">
+    <div class="container">
+      <div class="calc-box">
+        <div class="form-grid" style="align-items: end;">
+          <div class="field">
+            <label for="rot-crop">Що росте на полі зараз?</label>
+            <select id="rot-crop">
+              <option value="sunflower">Соняшник</option>
+              <option value="corn">Кукурудза</option>
+              <option value="soy" selected>Соя</option>
+              <option value="wheat">Пшениця (або Ячмінь)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="rot-repeat">Чи планується повторний посів цієї ж культури?</label>
+            <select id="rot-repeat">
+              <option value="no" selected>Ні, дотримуюсь чергування</option>
+              <option value="yes">Розглядаю повторний посів</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="result-panel" id="rot-result" style="grid-template-columns: 1fr;">
+          <div>
+            <div class="r-label">Рекомендований ланцюжок на 4 сезони</div>
+            <div class="r-value" id="rot-chain" style="font-size: 1.3rem;">Соя → Пшениця → Соняшник → Кукурудза</div>
+            <p id="rot-advice" style="margin: 10px 0 0; color: var(--text-on-dark-muted); font-size: 0.95rem;"></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid cols-2" style="margin-top: 28px;">
+        <div class="card" style="padding: 22px;">
+          <h2 style="margin: 0 0 10px; font-size: 1.15rem; color: var(--dark-green);">Чому саме ця послідовність?</h2>
+          <ul style="margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 8px;">
+            <li><strong>Соняшник → Кукурудза:</strong> у посівах кукурудзи легко прибрати падалицю соняшнику дводольними гербіцидами.</li>
+            <li><strong>Кукурудза → Соя:</strong> відсутність спільних хвороб та чистий старт.</li>
+            <li><strong>Соя → Пшениця:</strong> соя залишає фіксований азот і рано звільняє поле під озимину.</li>
+            <li><strong>Пшениця → Соняшник:</strong> ідеальна перерва у 4 роки для профілактики вовчка та гнилей.</li>
+          </ul>
+        </div>
+        <div class="card" style="padding: 22px; background: var(--surface-soft);">
+          <h2 style="margin: 0 0 10px; font-size: 1.15rem; color: var(--dark-green);">Правило оранки</h2>
+          <p style="margin: 0;">Згідно з технологічними нотатками господарства, глибока оранка проводиться <strong>1 раз на 3 роки</strong> переважно під кукурудзу або після пшениці, а на решті полів використовується дискування під різними кутами, культивація та боронування в 1–2 сліди.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const CYCLE = ['sunflower', 'corn', 'soy', 'wheat'] as const;
+  const NAMES: Record<(typeof CYCLE)[number], string> = {
+    sunflower: 'Соняшник',
+    corn: 'Кукурудза',
+    soy: 'Соя',
+    wheat: 'Пшениця',
+  };
+  const ADVICE: Record<(typeof CYCLE)[number], string> = {
+    sunflower: 'Наступного року сійте Кукурудзу (72 тис./га) — страхові гербіциди надійно знімуть падалицю соняшнику.',
+    corn: 'Після Кукурудзи оптимально заходити Соєю (Клен 450 тис./га або Great Plains 118 тис./га) з мінімальним тиском хвороб.',
+    soy: 'Після Сої найкращий вибір — Озима пшениця (5.5 млн/га) з весняним підживленням КАС-32 та коткуванням після сівби.',
+    wheat: 'Після Пшениці поле готове до повернення Соняшнику (55 тис./га) або проведення планової оранки раз на 3 роки.',
+  };
+
+  const cropEl = document.getElementById('rot-crop') as HTMLSelectElement;
+  const repeatEl = document.getElementById('rot-repeat') as HTMLSelectElement;
+  const chainEl = document.getElementById('rot-chain')!;
+  const adviceEl = document.getElementById('rot-advice')!;
+
+  function update() {
+    const val = cropEl.value as (typeof CYCLE)[number];
+    const idx = CYCLE.indexOf(val);
+    const seq = [0, 1, 2, 3].map((offset) => NAMES[CYCLE[(idx + offset) % 4]]);
+    chainEl.textContent = seq.join(' → ');
+
+    if (repeatEl.value === 'yes') {
+      if (val === 'soy') {
+        adviceEl.textContent =
+          '⚠️ «Соя по сої» допустима лише як виняток: у прохолодну вологу погоду зростає ризик вогнищ хвороб — обов’язково закладіть у бюджет фунгіцид і протруйник.';
+      } else if (val === 'sunflower') {
+        adviceEl.textContent =
+          '🚫 Соняшник по соняшнику не рекомендується! Високий ризик вовчка, білої та сірої гнилі. Краще перейти на Кукурудзу.';
+      } else {
+        adviceEl.textContent =
+          '⚠️ Повторний посів можливий, але знижує потенціал на 10–15% і підвищує витрати на ЗЗР. ' + ADVICE[val];
+      }
+    } else {
+      adviceEl.textContent = ADVICE[val];
+    }
+  }
+
+  cropEl.addEventListener('change', update);
+  repeatEl.addEventListener('change', update);
+  update();
+</script>

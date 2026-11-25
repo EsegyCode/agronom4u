@@ -1,0 +1,52 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const items = [
+  { title: 'Оранка (1 раз на 3 роки)', cat: 'Обробіток', desc: 'Глибокий обробіток під кукурудзу та після пшениці для заробки решток.', icon: '🚜' },
+  { title: 'Дискування в різних напрямках', cat: 'Обробіток', desc: 'Проводиться під кутами до поля для запобігання утворенню канав.', icon: '⚙️' },
+  { title: 'Боронування (1–2 сліди)', cat: 'Обробіток', desc: 'Закриття вологи та зменшення фракції грудок ґрунту перед сівбою.', icon: '🌱' },
+  { title: 'Сівба сої сівалкою Клен', cat: 'Посів', desc: 'Норма 450 тис./га (Імпульс 18, Частота 21) + стартовий карбамід 50–60 кг/га.', icon: '🫘' },
+  { title: 'Точний висів Great Plains', cat: 'Посів', desc: 'Норма 118 тис./га (налаштування 28 на 17) для рівномірного стояння сої.', icon: '📏' },
+  { title: 'Коткування після сівби', cat: 'Догляд', desc: 'Вирівнювання вертикалі поля для комфортного збирання пшениці та сої.', icon: '🛞' },
+  { title: 'Весняний КАС-32 на пшениці', cat: 'Живлення', desc: 'Норма 200 кг у 150 л робочого розчину на гектар.', icon: '💧' },
+  { title: 'Обробка саду навесні', cat: 'Сад і ягоди', desc: 'На початку березня та в бутонізацію: Хорус + Скор.', icon: '🌳' },
+];
+---
+
+<BaseLayout
+  title="Галерея польових робіт"
+  description="Візуальний огляд основних технологічних операцій у полі та саду: обробіток ґрунту, сівба, живлення та захист."
+  ogImage="/og/gallery.png"
+  canonicalPath="/gallery/index.html"
+>
+  <section class="page-hero">
+    <div class="container">
+      <div class="breadcrumbs">
+        <a href="/index.html">Головна</a> › <span>Галерея</span>
+      </div>
+      <span class="badge badge-dark">Хроніка сезону</span>
+      <h1>Галерея польових робіт</h1>
+      <p>Ключові технологічні операції господарства — від весняного боронування до збирання врожаю.</p>
+    </div>
+  </section>
+
+  <section class="section section-white">
+    <div class="container">
+      <div class="grid cols-4">
+        {items.map((item) => (
+          <article class="card">
+            <div class="card-thumb">
+              <span style="font-size: 3rem;" aria-hidden="true">{item.icon}</span>
+              <div class="card-overlay">{item.desc}</div>
+            </div>
+            <div class="card-body">
+              <span class="badge" style="align-self: flex-start;">{item.cat}</span>
+              <h3>{item.title}</h3>
+              <p>{item.desc}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

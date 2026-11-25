@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { BLOG_POSTS } from '../../data/blog';
+---
+
+<BaseLayout
+  title="Блог та польові нотатки"
+  description="Практичні статті та польові спостереження Agronom4u: сівозміна, сівба сої, живлення пшениці КАС-32 та економіка 1 га."
+  ogImage="/og/blog.png"
+  canonicalPath="/blog/index.html"
+>
+  <section class="page-hero">
+    <div class="container">
+      <div class="breadcrumbs">
+        <a href="/index.html">Головна</a> › <span>Блог</span>
+      </div>
+      <span class="badge badge-dark">Практика господарства</span>
+      <h1>Блог та польові нотатки</h1>
+      <p>Реальний досвід ведення агрофірми: налаштування техніки, схеми живлення, захист та економіка.</p>
+    </div>
+  </section>
+
+  <section class="section section-white">
+    <div class="container">
+      <div class="grid cols-3">
+        {BLOG_POSTS.map((post) => (
+          <article class="card">
+            <div class="card-thumb">
+              <span style="font-size: 2.8rem;" aria-hidden="true">📰</span>
+              <div class="card-overlay">{post.category} • {post.readTime}</div>
+            </div>
+            <div class="card-body">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span class="badge">{post.category}</span>
+                <time datetime={post.date} style="font-size: 0.8rem; color: var(--text-muted);">{post.date}</time>
+              </div>
+              <h3>{post.title}</h3>
+              <p>{post.excerpt}</p>
+              <a class="card-footer-link" href={`/blog/posts/${post.slug}.html`}>Читати повністю →</a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

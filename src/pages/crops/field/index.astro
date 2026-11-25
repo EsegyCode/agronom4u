@@ -1,0 +1,71 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { FIELD_CROPS, FIELD_TOPICS } from '../../../data/fieldCrops';
+
+const crops = Object.values(FIELD_CROPS);
+const cropIcons: Record<string, string> = {
+  soy: '🫘',
+  wheat: '🌾',
+  corn: '🌽',
+  sunflower: '🌻',
+};
+---
+
+<BaseLayout
+  title="Польові культури"
+  description="Детальні технологічні карти вирощування польових культур України: соя, пшениця, кукурудза, соняшник — 13 етапів для кожної культури."
+  ogImage="/og/field-soy.png"
+  canonicalPath="/crops/field/index.html"
+>
+  <section class="page-hero">
+    <div class="container">
+      <div class="breadcrumbs">
+        <a href="/index.html">Головна</a> › <span>Польові культури</span>
+      </div>
+      <span class="badge badge-dark">4 культури • 52 детальні розділи</span>
+      <h1>Польові культури</h1>
+      <p>Практичні путівники по вирощуванню основних польових культур України на базі виробничих нормативів агрофірми.</p>
+    </div>
+  </section>
+
+  <section class="section section-white">
+    <div class="container">
+      <div class="grid cols-2">
+        {crops.map((crop) => (
+          <article class="card">
+            <div class="card-body" style="padding: 24px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                  <span style="font-size: 2.3rem;" aria-hidden="true">{cropIcons[crop.slug]}</span>
+                  <div>
+                    <h2 style="margin: 0; font-size: 1.45rem; color: var(--dark-green);">{crop.name}</h2>
+                    <span style="font-size: 0.85rem; color: var(--text-muted); font-style: italic;">{crop.latinName}</span>
+                  </div>
+                </div>
+                <span class="badge">{crop.badge}</span>
+              </div>
+
+              <p style="margin-top: 8px;">{crop.description}</p>
+
+              <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin: 10px 0;">
+                {crop.keyStats.map((st) => (
+                  <div style="background: var(--surface-soft); border: 1px solid var(--border); border-radius: 10px; padding: 10px;">
+                    <div style="font-size: 0.76rem; color: var(--text-muted);">{st.label}</div>
+                    <div style="font-weight: 800; color: var(--dark-green); font-size: 0.95rem;">{st.value}</div>
+                  </div>
+                ))}
+              </div>
+
+              <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 8px;">
+                <a class="btn btn-primary" href={`/crops/field/${crop.slug}/index.html`}>
+                  Відкрити путівник ({FIELD_TOPICS.length} розділів) →
+                </a>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">Піддомен: <code>{crop.subdomain}</code></span>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

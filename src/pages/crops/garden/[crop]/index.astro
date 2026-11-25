@@ -1,0 +1,94 @@
+---
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import { GARDEN_CROPS, type GardenCrop } from '../../../../data/gardenCrops';
+import { SITE } from '../../../../data/site';
+
+export function getStaticPaths() {
+  return GARDEN_CROPS.map((crop) => ({
+    params: { crop: crop.slug },
+    props: { crop },
+  }));
+}
+
+interface Props {
+  crop: GardenCrop;
+}
+
+const { crop } = Astro.props;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: `${crop.name} — вирощування та догляд`,
+  description: crop.shortHover,
+  inLanguage: 'uk',
+  mainEntityOfPage: `${SITE.url}/crops/garden/${crop.slug}/index.html`,
+  author: { '@type': 'Organization', name: SITE.name },
+};
+---
+
+<BaseLayout
+  title={`${crop.name} — городня культура`}
+  description={`${crop.name}: ${crop.shortHover}. Схема посадки ${crop.spacing}, полив, добрива та попередники.`}
+  ogImage="/og/garden.png"
+  canonicalPath={`/crops/garden/${crop.slug}/index.html`}
+  schema={schema}
+>
+  <section class="page-hero">
+    <div class="container">
+      <div class="breadcrumbs">
+        <a href="/index.html">Головна</a> ›
+        <a href="/crops/garden/index.html">Городні культури</a> ›
+        <span>{crop.name}</span>
+      </div>
+      <span class="badge badge-dark">{crop.category} • {crop.season}</span>
+      <h1>{crop.name}</h1>
+      <p>{crop.shortHover}</p>
+    </div>
+  </section>
+
+  <section class="section section-white">
+    <div class="container">
+      <div class="grid cols-4" style="margin-bottom: 28px;">
+        <div class="card" style="padding: 16px;">
+          <div style="font-size: 0.78rem; color: var(--text-muted);">Схема посадки</div>
+          <div style="font-weight: 800; color: var(--dark-green); font-size: 1.05rem; margin-top: 4px;">{crop.spacing}</div>
+        </div>
+        <div class="card" style="padding: 16px;">
+          <div style="font-size: 0.78rem; color: var(--text-muted);">Температура ґрунту</div>
+          <div style="font-weight: 800; color: var(--dark-green); font-size: 1.05rem; margin-top: 4px;">{crop.soilTemp}</div>
+        </div>
+        <div class="card" style="padding: 16px;">
+          <div style="font-size: 0.78rem; color: var(--text-muted);">Сезон</div>
+          <div style="font-weight: 800; color: var(--dark-green); font-size: 1.05rem; margin-top: 4px;">{crop.season}</div>
+        </div>
+        <div class="card" style="padding: 16px;">
+          <div style="font-size: 0.78rem; color: var(--text-muted);">Найкращі попередники</div>
+          <div style="font-weight: 700; color: var(--dark-green); font-size: 0.92rem; margin-top: 4px;">{crop.predecessors}</div>
+        </div>
+      </div>
+
+      <div class="grid cols-2">
+        <div class="card" style="padding: 22px;">
+          <h2 style="margin: 0 0 12px; font-size: 1.2rem; color: var(--dark-green);">Полив, живлення та захист</h2>
+          <p><strong>💧 Полив:</strong> {crop.watering}</p>
+          <p><strong>🧪 Добрива:</strong> {crop.fertilizer}</p>
+          <p style="margin-bottom: 0;"><strong>🛡️ Захист:</strong> {crop.protection}</p>
+        </div>
+
+        <div class="card" style="padding: 22px; background: var(--surface-soft);">
+          <h2 style="margin: 0 0 12px; font-size: 1.2rem; color: var(--dark-green);">Практичні поради</h2>
+          <ul style="margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 8px;">
+            {crop.tips.map((tip) => (
+              <li>{tip}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <div style="margin-top: 28px;">
+        <a class="btn btn-outline" href="/crops/garden/index.html">← Повернутися до списку городніх культур</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { SITE } from '../../data/site';
+
+const appSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Агроном для тебе (Agronom4u)',
+  operatingSystem: 'Android',
+  applicationCategory: 'BusinessApplication',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'UAH' },
+  url: `${SITE.url}/app/index.html`,
+};
+---
+
+<BaseLayout
+  title="Застосунок для Android"
+  description="Мобільний застосунок Agronom4u для Android: планер посіву, сівозміни, калькуляція витрат на 1 га та перевірені продавці насіння й ЗЗР."
+  ogImage="/og/app.png"
+  canonicalPath="/app/index.html"
+  schema={appSchema}
+>
+  <section class="page-hero">
+    <div class="container">
+      <div class="breadcrumbs">
+        <a href="/index.html">Головна</a> › <span>Застосунок</span>
+      </div>
+      <span class="badge badge-dark">Android • Офлайн у полі</span>
+      <h1>Застосунок «Агроном для тебе»</h1>
+      <p>Планер посіву, сівозміни, калькуляції цін та перевірені постачальники — завжди під рукою без інтернету в полі.</p>
+    </div>
+  </section>
+
+  <section class="section section-white">
+    <div class="container">
+      <div class="grid cols-2">
+        <div class="card" style="padding: 26px;">
+          <h2 style="margin: 0 0 12px; color: var(--dark-green);">Що буде в застосунку?</h2>
+          <ul style="margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 10px;">
+            <li><strong>Планер посіву:</strong> збережені налаштування сівалок (Клен, Great Plains) та нагадування по фазах.</li>
+            <li><strong>Сівозміна по полях:</strong> історія посівів по кожному полю з підказками щодо попередників.</li>
+            <li><strong>Калькулятор економіки 1 га:</strong> облік ПММ, оплати праці, насіння, КАС-32, ЗЗР і паїв.</li>
+            <li><strong>Надійні продавці:</strong> каталог перевірених постачальників насіння, добрив та пестицидів.</li>
+          </ul>
+        </div>
+
+        <div class="card section-dark" style="padding: 26px; display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <span class="badge badge-dark" style="margin-bottom: 12px;">Ранній доступ</span>
+            <h2 style="margin: 0 0 10px; color: #fff;">Користуйтеся веб-інструментами вже зараз</h2>
+            <p>Усі калькулятори та путівники вже працюють у мобільному браузері як легка веб-платформа.</p>
+          </div>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px;">
+            <a class="btn btn-accent" href="/calculators/index.html">Відкрити калькулятори →</a>
+            <a class="btn btn-outline-light" href="/crop-rotation/index.html">Планер сівозміни</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
